@@ -2,6 +2,7 @@ mod routes;
 
 #[derive(Debug, Eq, Clone, PartialEq)]
 pub enum StepKind {
+    Initial,
     BaseScope,
     Property,
     PropertyClose,

@@ -14,6 +14,9 @@ pub fn route(glyph: char, prev_kind: &StepKind) -> StepKind {
         StepKind::Value => get_kind_from_value(glyph),
         StepKind::ValueClose => get_kind_from_value_close(glyph),
         StepKind::DeclarationClose => get_kind_from_declaration_close(glyph),
+        // injections
+        StepKind::Injection => get_kind_from_injection(glyph),
+        StepKind::InjectionSpace => get_kind_from_injection_space(glyph),
         _ => get_kind_from_base_scope(glyph),
     }
 }
@@ -49,14 +52,19 @@ fn get_kind_from_injection_space(glyph: char) -> StepKind {
 fn get_kind_from_at_rule(glyph: char) -> StepKind {
     match glyph {
         '{' => StepKind::AtRuleScope,
+        ';' => StepKind::BaseScope,
         _ => StepKind::AtRule,
     }
 }
 
 fn get_kind_from_at_rule_scope(glyph: char) -> StepKind {
+    if glyph.is_whitespace() {
+        return StepKind::BaseScope;
+    }
     match glyph {
         '}' => StepKind::AtRuleScopeClose,
-        _ => StepKind::BaseScope,
+        '@' => StepKind::AtRuleScope,
+        _ => StepKind::Selectors,
     }
 }
 
@@ -115,6 +123,7 @@ fn get_kind_from_declaration_close(glyph: char) -> StepKind {
 
     match glyph {
         '@' => StepKind::AtRule,
+        '{' => StepKind::Injection,
         _ => StepKind::Selectors,
     }
 }
