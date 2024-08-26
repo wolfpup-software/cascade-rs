@@ -17,6 +17,17 @@ pub fn route(glyph: char, prev_kind: &StepKind) -> StepKind {
         // injections
         StepKind::Injection => get_kind_from_injection(glyph),
         StepKind::InjectionSpace => get_kind_from_injection_space(glyph),
+        // quotes
+        StepKind::SelectorQuote => get_kind_from_selector_quote(glyph),
+        StepKind::SelectorQuoteClose => get_kind_from_selectors(glyph),
+        StepKind::SelectorDoubleQuote => get_kind_from_selector_double_quote(glyph),
+        StepKind::SelectorDoubleQuoteClose => get_kind_from_selectors(glyph),
+        StepKind::AtRuleQuote => get_kind_from_at_rule_quote(glyph),
+        StepKind::AtRuleQuoteClose => get_kind_from_at_rule(glyph),
+        StepKind::AtRuleDoubleQuote => get_kind_from_at_rule_double_quote(glyph),
+        StepKind::AtRuleDoubleQuoteClose => get_kind_from_at_rule(glyph),
+        // injection confirmed
+        // at rule close
         _ => get_kind_from_base_scope(glyph),
     }
 }
@@ -51,8 +62,10 @@ fn get_kind_from_injection_space(glyph: char) -> StepKind {
 /* at rules */
 fn get_kind_from_at_rule(glyph: char) -> StepKind {
     match glyph {
+        '\'' => StepKind::AtRuleQuote,
+        '"' => StepKind::AtRuleDoubleQuote,
         '{' => StepKind::AtRuleScope,
-        ';' => StepKind::BaseScope,
+        ';' => StepKind::AtRuleClose,
         _ => StepKind::AtRule,
     }
 }
@@ -71,6 +84,8 @@ fn get_kind_from_at_rule_scope(glyph: char) -> StepKind {
 /* selectors */
 fn get_kind_from_selectors(glyph: char) -> StepKind {
     match glyph {
+        '\'' => StepKind::SelectorQuote,
+        '"' => StepKind::SelectorDoubleQuote,
         '{' => StepKind::Declaration,
         _ => StepKind::Selectors,
     }
@@ -125,5 +140,34 @@ fn get_kind_from_declaration_close(glyph: char) -> StepKind {
         '@' => StepKind::AtRule,
         '{' => StepKind::Injection,
         _ => StepKind::Selectors,
+    }
+}
+
+/* Quotes */
+fn get_kind_from_selector_quote(glyph: char) -> StepKind {
+    match glyph {
+        '\'' => StepKind::SelectorQuoteClose,
+        _ => StepKind::SelectorQuote,
+    }
+}
+
+fn get_kind_from_selector_double_quote(glyph: char) -> StepKind {
+    match glyph {
+        '"' => StepKind::SelectorDoubleQuoteClose,
+        _ => StepKind::SelectorDoubleQuote,
+    }
+}
+
+fn get_kind_from_at_rule_quote(glyph: char) -> StepKind {
+    match glyph {
+        '\'' => StepKind::AtRuleQuoteClose,
+        _ => StepKind::AtRuleQuote,
+    }
+}
+
+fn get_kind_from_at_rule_double_quote(glyph: char) -> StepKind {
+    match glyph {
+        '"' => StepKind::AtRuleDoubleQuoteClose,
+        _ => StepKind::AtRuleDoubleQuote,
     }
 }

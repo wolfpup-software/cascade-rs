@@ -263,3 +263,85 @@ fn parse_selector_with_injections_no_spaces() {
 
     assert_eq!(steps, expected);
 }
+
+#[test]
+fn parse_at_rule_with_quotes_no_spaces() {
+    let template_str: &str = "@import('hai.css');";
+
+    let steps = parse_template_str(template_str, StepKind::Initial);
+    let expected: Results = Vec::from([
+        Step {
+            kind: StepKind::Initial,
+            origin: 0,
+            target: 0,
+        },
+        Step {
+            kind: StepKind::AtRule,
+            origin: 0,
+            target: 8,
+        },
+        Step {
+            kind: StepKind::AtRuleQuote,
+            origin: 8,
+            target: 16,
+        },
+        Step {
+            kind: StepKind::AtRuleQuoteClose,
+            origin: 16,
+            target: 17,
+        },
+        Step {
+            kind: StepKind::AtRule,
+            origin: 17,
+            target: 18,
+        },
+        Step {
+            kind: StepKind::AtRuleClose,
+            origin: 18,
+            target: 19,
+        },
+    ]);
+
+    assert_eq!(steps, expected);
+}
+
+#[test]
+fn parse_at_rule_with_double_quotes_no_spaces() {
+    let template_str: &str = "@import(\"hai.css\");";
+
+    let steps = parse_template_str(template_str, StepKind::Initial);
+    let expected: Results = Vec::from([
+        Step {
+            kind: StepKind::Initial,
+            origin: 0,
+            target: 0,
+        },
+        Step {
+            kind: StepKind::AtRule,
+            origin: 0,
+            target: 8,
+        },
+        Step {
+            kind: StepKind::AtRuleDoubleQuote,
+            origin: 8,
+            target: 16,
+        },
+        Step {
+            kind: StepKind::AtRuleDoubleQuoteClose,
+            origin: 16,
+            target: 17,
+        },
+        Step {
+            kind: StepKind::AtRule,
+            origin: 17,
+            target: 18,
+        },
+        Step {
+            kind: StepKind::AtRuleClose,
+            origin: 18,
+            target: 19,
+        },
+    ]);
+
+    assert_eq!(steps, expected);
+}

@@ -12,9 +12,18 @@ pub enum StepKind {
     Declaration,
     DeclarationClose,
     Selectors,
+    SelectorQuote,
+    SelectorQuoteClose,
+    SelectorDoubleQuote,
+    SelectorDoubleQuoteClose,
     AtRuleScope,
     AtRuleScopeClose,
+    AtRuleQuote,
+    AtRuleQuoteClose,
+    AtRuleDoubleQuote,
+    AtRuleDoubleQuoteClose,
     AtRule,
+    AtRuleClose,
     Injection,
     InjectionSpace,
     InjectionConfirmed,
@@ -70,4 +79,8 @@ pub fn parse_template_str(template_str: &str, intial_kind: StepKind) -> Results 
     }
 
     steps
+}
+
+pub fn get_text_from_step<'a>(template_str: &'a str, step: &Step) -> &'a str {
+    &template_str[step.origin..step.target]
 }

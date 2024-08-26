@@ -1,5 +1,5 @@
 [workspace]
-members = ["parse"]
+members = [ "css_string","parse"]
 resolver = "2"
 
 [workspace.dependencies]
